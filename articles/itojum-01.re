@@ -27,18 +27,90 @@ end
 == パターン図鑑
 パターンマッチで使えるパターンは複数あります。ここでは、それらを例を交えながらご紹介します。
 
-=== Hashパターン
+=== Valueパターン
+Valueパターンは値を(@<code>{#===})で比較したときに@<code>{true}になるオブジェクトにマッチします。
+@<list>{code3.2}のサンプルコードは、@<code>{Integer === 168 # => true}になるためマッチとなります。
 
+//listnum[code3.2][Valueパターンのサンプルコード][ruby]{
+case 168
+in Integer
+	"マッチしたよ"
+else
+	"マッチしなかったよ..."
+end
+# => "マッチしたよ"
+//}
 
-=== Findパターン
-
-=== Arrayパターン
-
-=== Alternativeパターン
 
 === Variableパターン
+Variableパターンは、対象の値がなんであってもマッチし、その値を新しい変数に束縛します。
+先頭が小文字かアンダースコア(_)で始まる名前を書くと新しい変数として束縛されます。
+//listnum[code3.3][Variableパターンのサンプルコード][ruby]{
+value = "Alice"
+case value
+in name
+	"#{name}さん！こんにちは！"
+else
+	"マッチしなかったよ..."
+end
+# => "Aliceさん！こんにちは！"
+//}
 
-=== Valueパターン
+=== Hashパターン
+HashパターンはHashオブジェクトか後述の@<code>{#deconstruct_keys}メソッド(@<hd>{クラスオブジェクトのパターンマッチ|#deconstruct_keys})を持つオブジェクトにマッチします。
+@<list>{code3.4}はValueパターン(@<hd>{パターン図鑑|Valueパターン})と組み合わせています。
+
+//listnum[code3.4][Hashパターンのサンプルコード][ruby]{
+case { value: 168 }
+in { value: Integer }
+	"マッチしたよ"
+else
+	"マッチしなかったよ..."
+end
+# => "マッチしたよ"
+//}
+=== Arrayパターン
+ArrayパターンはArrayオブジェクトか後述の@<code>{#deconstruct}メソッド(@<hd>{クラスオブジェクトのパターンマッチ|#deconstruct})を持つオブジェクトにマッチします。
+//listnum[code3.5][Hashパターンのサンプルコード][ruby]{
+crews = ["Alice", "Bob", "Charlie", "Dave"]
+case crews
+in ["Alice", next_user, *]
+  "Aliceさんの後ろの従業員は#{next_user}さん"
+else
+	puts "マッチしなかったよ..."
+end
+# => "Aliceさんの後ろの従業員はBobさん"
+//}
+
+=== Findパターン
+FindパターンはArrayオブジェクトか後述の@<code>{#deconstruct}メソッド(@<hd>{クラスオブジェクトのパターンマッチ|#deconstruct})を持つオブジェクトにマッチします。
+Arrayパターン(@<hd>{パターン図鑑|Arrayパターン})との違いは、Arrayパターンが先頭か末尾が固定なのに対し、Findパターンは配列のどこかにあればマッチします。使う分には気にしなくて良いと思います。
+//listnum[code3.6][Findパターンのサンプルコード][ruby]{
+crews = ["Alice", "Bob", "Charlie", "Dave"]
+case crews
+in [*, "Charlie" ,*]
+  "Charlieさんがいました！"
+else
+	puts "マッチしなかったよ..."
+end
+# => "Charlieさんがいました"
+//}
+
+=== Alternativeパターン
+Alternativeパターンは複数のパターンを組み合わせて「OR」でマッチします。
+@<code>{|}記号で複数のパターンを並べることができます。
+
+//listnum[code3.7][Alternativeパターンのサンプルコード][ruby]{
+role = "director"
+
+case role
+in "manager" | "director" | "executive"
+  puts "管理職です"
+else
+  puts "メンバーです"
+end
+# => "管理職です"
+//}
 
 == クラスオブジェクトのパターンマッチ
 === #deconstruct
