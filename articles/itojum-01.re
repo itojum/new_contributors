@@ -72,7 +72,7 @@ end
 //}
 === Arrayパターン
 ArrayパターンはArrayオブジェクトか後述の@<code>{#deconstruct}メソッド(@<hd>{クラスオブジェクトのパターンマッチ|#deconstruct})を持つオブジェクトにマッチします。
-//listnum[code3.5][Hashパターンのサンプルコード][ruby]{
+//listnum[code3.5][Arrayパターンのサンプルコード][ruby]{
 crews = ["Alice", "Bob", "Charlie", "Dave"]
 case crews
 in ["Alice", next_user, *]
@@ -94,7 +94,7 @@ in [*, "Charlie" ,*]
 else
 	puts "マッチしなかったよ..."
 end
-# => "Charlieさんがいました"
+# => "Charlieさんがいました！"
 //}
 
 === Alternativeパターン
@@ -218,7 +218,7 @@ def fetch_unassigned_beginner_issues(repo)
     in {
       assignees: [],
       labels: [*, { name: 'good first issue' }, *],
-      html_url: url, title:　title
+      html_url: url, title: title
     }
       result_issues << { url:, title: }
     else
