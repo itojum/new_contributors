@@ -113,14 +113,60 @@ end
 //}
 
 == クラスオブジェクトのパターンマッチ
+Hashパターンは@<code>{#deconstruct_keys}が定義されたオブジェクトに、ArrayパターンとFindパターンは@<code>{#deconstruct}が定義されたオブジェクトにもマッチします。
+
 === #deconstruct
+//listnum[code3.8][#deconstructのサンプルコード][ruby]{
+class Crew
+  def initialize(name, role, age)
+    @name = name
+    @role = role
+    @age  = age
+  end
+
+  def deconstruct
+    [@name, @role, @age]
+  end
+end
+
+crew = Crew.new("Alice", "engineer", 22)
+
+case crew
+in Crew["Alice", role, age]
+  "Aliceの役職は #{role} 、年齢は #{age} です"
+end
+# => "Aliceの役職は engineer 、年齢は 22 です"
+//}
+
 === #deconstruct_keys
+
+//listnum[code3.9][#deconstruct_keysのサンプルコード][ruby]{
+class Crew
+  def initialize(name, role, age)
+    @name = name
+    @role = role
+    @age  = age
+  end
+
+  def deconstruct_keys(keys)
+    { name: @name, role: @role, age: @age }
+  end
+end
+
+crew = Crew.new("Bob", "manager", 35)
+
+case crew
+in Crew(role: "manager", name:)
+  "マネージャーの #{name} さん"
+end
+# => "マネージャーの Bob さん"
+//}
 
 == パターンマッチによるリファクタリング
 
-@<list>{code3.2}は、GitHubのAPIでアサインされていない かつ 'good first issue'ラベルが割り当てられているissueを取得するコードです。
+@<list>{code3.10}は、GitHubのAPIでアサインされていない かつ 'good first issue'ラベルが割り当てられているissueを取得するコードです。
 やりたいことに対して複雑すぎると思いませんか？これをパターンマッチでリファクタリングしてみましょう。
-//listnum[code3.2][初心者向けのIssuesを取得するメソッド][ruby]{
+//listnum[code3.10][初心者向けのIssuesを取得するメソッド][ruby]{
 def fetch_unassigned_beginner_issues(repo)
   client = Octokit::Client.new(
     :access_token => ENV['GITHUB_TOKEN'],
@@ -148,15 +194,15 @@ def fetch_unassigned_beginner_issues(repo)
 end
 //}
 
-@<list>{code3.3}ではリファクタリングをするために先ほど紹介したいくつかのパターンを使っています。
+@<list>{code3.11}ではリファクタリングをするために先ほど紹介したいくつかのパターンを使っています。
 - Hashパターン(@<hd>{パターン図鑑|Hashパターン})
 - Findパターン(@<hd>{パターン図鑑|Findパターン})
 - Valueパターン(@<hd>{パターン図鑑|Valueパターン})
 - Variableパターン(@<hd>{パターン図鑑|Variableパターン})
 
-@<list>{code3.2}と@<list>{code3.3}を比較していただければ、パターンマッチを使うことで簡潔に値の探索・抽出を行えることがわかると思います。
+@<list>{code3.10}と@<list>{code3.11}を比較していただければ、パターンマッチを使うことで簡潔に値の探索・抽出を行えることがわかると思います。
 
-//listnum[code3.3][パターンマッチをしてリファクタリングしたコード][ruby]{
+//listnum[code3.11][パターンマッチをしてリファクタリングしたコード][ruby]{
 def fetch_unassigned_beginner_issues(repo)
   client = Octokit::Client.new(
     :access_token => ENV['GITHUB_TOKEN'],
