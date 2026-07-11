@@ -59,6 +59,7 @@ end
 
 === Hashパターン
 HashパターンはHashオブジェクトか後述の@<code>{#deconstruct_keys}メソッド(@<hd>{クラスオブジェクトのパターンマッチ|#deconstruct_keys})を持つオブジェクトにマッチします。
+パターンに指定したキーのみチェックされ、他のキーは無視されます。
 @<list>{code3.4}はValueパターン(@<hd>{パターン図鑑|Valueパターン})と組み合わせています。
 
 //listnum[code3.4][Hashパターンのサンプルコード][ruby]{
@@ -70,8 +71,10 @@ else
 end
 # => "マッチしたよ"
 //}
+
 === Arrayパターン
 ArrayパターンはArrayオブジェクトか後述の@<code>{#deconstruct}メソッド(@<hd>{クラスオブジェクトのパターンマッチ|#deconstruct})を持つオブジェクトにマッチします。
+@<code>{*}を使うと残りの要素をまとめてマッチさせることができます。
 //listnum[code3.5][Arrayパターンのサンプルコード][ruby]{
 crews = ["Alice", "Bob", "Charlie", "Dave"]
 case crews
@@ -85,7 +88,7 @@ end
 
 === Findパターン
 FindパターンはArrayオブジェクトか後述の@<code>{#deconstruct}メソッド(@<hd>{クラスオブジェクトのパターンマッチ|#deconstruct})を持つオブジェクトにマッチします。
-Arrayパターン(@<hd>{パターン図鑑|Arrayパターン})との違いは、Arrayパターンが先頭か末尾が固定なのに対し、Findパターンは配列のどこかにあればマッチします。使う分には気にしなくて良いと思います。
+Arrayパターン(@<hd>{パターン図鑑|Arrayパターン})との違いは、Arrayパターンが先頭か末尾が固定なのに対し、Findパターンは配列のどこかにあればマッチします。配列の順序を問わず特定の要素を探したい場合に適しています。
 //listnum[code3.6][Findパターンのサンプルコード][ruby]{
 crews = ["Alice", "Bob", "Charlie", "Dave"]
 case crews
@@ -135,6 +138,8 @@ crew = Crew.new("Alice", "engineer", 22)
 case crew
 in Crew["Alice", role, age]
   "Aliceの役職は #{role} 、年齢は #{age} です"
+else
+  "マッチしなかったよ..."
 end
 # => "Aliceの役職は engineer 、年齢は 22 です"
 //}
@@ -159,6 +164,8 @@ crew = Crew.new("Bob", "manager", 35)
 case crew
 in Crew(role: "manager", name:)
   "マネージャーの #{name} さん"
+else
+  "マッチしなかったよ..."
 end
 # => "マネージャーの Bob さん"
 //}
@@ -199,6 +206,7 @@ end
 
  * Hashパターン(@<hd>{パターン図鑑|Hashパターン})
  * Findパターン(@<hd>{パターン図鑑|Findパターン})
+ * Arrayパターン(@<hd>{パターン図鑑|Arrayパターン})
  * Valueパターン(@<hd>{パターン図鑑|Valueパターン})
  * Variableパターン(@<hd>{パターン図鑑|Variableパターン})
 
