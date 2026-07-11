@@ -17,12 +17,12 @@ crew = {
 
 case crew
 in { name: name, skills: [*, { label: "PicoRuby", level: level }, *] }
-	puts "#{name}さんは、PicoRuby レベル#{level}のスキルを持っています"
+	"#{name}さんは、PicoRuby レベル#{level}のスキルを持っています"
 else
-	puts "PicoRubyのスキルを持っていません"
+	"PicoRubyのスキルを持っていません"
 end
 
-# => Bobさんは、PicoRuby レベル3のスキルを持っています
+# => "Bobさんは、PicoRuby レベル3のスキルを持っています"
 //}
 
 == パターン図鑑
@@ -78,7 +78,7 @@ case crews
 in ["Alice", next_user, *]
   "Aliceさんの後ろの従業員は#{next_user}さん"
 else
-	puts "マッチしなかったよ..."
+  "マッチしなかったよ..."
 end
 # => "Aliceさんの後ろの従業員はBobさん"
 //}
@@ -92,7 +92,7 @@ case crews
 in [*, "Charlie" ,*]
   "Charlieさんがいました！"
 else
-	puts "マッチしなかったよ..."
+  "マッチしなかったよ..."
 end
 # => "Charlieさんがいました！"
 //}
@@ -106,9 +106,9 @@ role = "director"
 
 case role
 in "manager" | "director" | "executive"
-  puts "管理職です"
+  "管理職です"
 else
-  puts "メンバーです"
+  "メンバーです"
 end
 # => "管理職です"
 //}
@@ -196,10 +196,11 @@ end
 //}
 
 @<list>{code3.11}ではリファクタリングをするために先ほど紹介したいくつかのパターンを使っています。
-- Hashパターン(@<hd>{パターン図鑑|Hashパターン})
-- Findパターン(@<hd>{パターン図鑑|Findパターン})
-- Valueパターン(@<hd>{パターン図鑑|Valueパターン})
-- Variableパターン(@<hd>{パターン図鑑|Variableパターン})
+
+ * Hashパターン(@<hd>{パターン図鑑|Hashパターン})
+ * Findパターン(@<hd>{パターン図鑑|Findパターン})
+ * Valueパターン(@<hd>{パターン図鑑|Valueパターン})
+ * Variableパターン(@<hd>{パターン図鑑|Variableパターン})
 
 @<list>{code3.10}と@<list>{code3.11}を比較していただければ、パターンマッチを使うことで簡潔に値の探索・抽出を行えることがわかると思います。
 
