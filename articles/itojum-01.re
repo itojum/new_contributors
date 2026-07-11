@@ -7,7 +7,7 @@ Rubyにおけるパターンマッチとは、Rubyのオブジェクトに対し
 
 //listnum[code3.1][パターンマッチを使ったサンプルコード][ruby]{
 crew = {
-	name: "アウグストゥス",
+	name: "Bob",
 	skills: [
 		{ label: "PicoRuby", level: 3 },
 		{ label: "Ruby", level: 5 }
@@ -20,6 +20,8 @@ in { name: name, skills: [*, { label: "PicoRuby", level: level }, *] }
 else
 	puts "PicoRubyのスキルを持っていません"
 end
+
+# => Bobさんは、PicoRuby レベル3のスキルを持っています
 //}
 
 == パターン図鑑
