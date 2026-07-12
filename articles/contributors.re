@@ -8,3 +8,4 @@
 
 ==== 第3章 いとじゅん / @itojum1230
 SmartHRという会社でプロダクトエンジニアをやっている26卒。Rubyist。VRChat.rbのオーガナイザー。
+https://itojum.dev/
