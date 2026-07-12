@@ -2,7 +2,6 @@ PREDEF:
   - preface.re
 
 CHAPS:
-  - article.re
   - yuki-01.re
   - itojum-01.re
   - yuki-02.re
