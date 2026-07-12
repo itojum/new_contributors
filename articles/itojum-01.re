@@ -215,7 +215,7 @@ end
 
 == パターンマッチによるリファクタリング
 
-@<list>{code3.10}は、GitHubのAPIでアサインされていない かつ 'good first issue'ラベルが割り当てられているissueを取得するコードです。
+@<list>{code3.10}は、Octokit@<fn>{octokit}を使ってGitHubのAPIでアサインされていない かつ 'good first issue'@<fn>{good-first-issue}ラベルが割り当てられているissueを取得するコードです。
 やりたいことに対して複雑すぎると思いませんか？これをパターンマッチでリファクタリングしてみましょう。
 //listnum[code3.10][初心者向けのIssuesを取得するメソッド][ruby]{
 def fetch_unassigned_beginner_issues(repo)
@@ -280,6 +280,9 @@ def fetch_unassigned_beginner_issues(repo)
   return result_issues
 end
 //}
+
+//footnote[octokit][RubyでGitHub APIを操作するためのgemです。https://github.com/octokit/octokit.rb]
+//footnote[good-first-issue][GitHubで初心者が取り組みやすいissueに付けるラベルの慣習です。オープンソースプロジェクトへの貢献を始める入口として広く使われています。]
 
 == おわりに
 
