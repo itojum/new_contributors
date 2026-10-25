@@ -4,7 +4,7 @@
 
 深くネストしたHashやArrayから値を取り出すコードを書いていると、そう思うことはありませんか。条件分岐を重ねるうちに、最初に何をしたかったのかが見えにくくなりがちです。
 
-Rubyにはそんなときに使えるパターンマッチという機能があります。オブジェクトの構造をそのまま条件として書けるので、複雑なデータからの値の抽出がすっきり書けます。Ruby 2.7で実験的機能として導入され、Ruby 3.0で正式機能になりました。本章ではRuby 4.0.5を使用しています。
+Rubyにはそんなときに使えるパターンマッチという機能があります。オブジェクトの構造をそのまま条件として書けるので、複雑なデータからの値の抽出がすっきり書けます。本章ではRuby 4.0.5を使用しています。
 
 === この章の目的
 
@@ -33,25 +33,25 @@ Rubyにはそんなときに使えるパターンマッチという機能があ�
  * パターンマッチを使ったリファクタリングの例
 
 == パターンマッチとは
-Rubyにおけるパターンマッチとは、Rubyのオブジェクトに対して、オブジェクトの構造をパターンと照合し、マッチした値をローカル変数に束縛する機能です。
+Rubyにおけるパターンマッチとは、オブジェクトの構造をパターンと照合し、マッチした値をローカル変数に束縛する機能です。
 パターンマッチはRuby 2.7で実験的機能として導入され、Ruby 3.0で正式機能になりました。従来の@<code>{case/when}が値の単純な比較に使われるのに対し、パターンマッチでは@<code>{case/in}を使い、オブジェクトの構造そのものを条件として記述できます。
 
-これによって、深いネスト構造を持ったオブジェクトから簡潔に値の探索・抽出が行えます。例えば、APIのレスポンスのような複雑でネストの深いオブジェクトからデータを抽出するときやOptionモナドなどによってラップされたオブジェクトに処理を行う場合に便利です。
+これによって、深いネスト構造を持ったオブジェクトから簡潔に値の探索・抽出が行えます。例えば、APIのレスポンスのような複雑でネストの深いオブジェクトからデータを抽出するときやOptionモナドなどによってラップされたオブジェクトを扱うときに便利です。
 
 //listnum[code3.1][パターンマッチを使ったサンプルコード][ruby]{
 crew = {
-	name: "Bob",
-	skills: [
-		{ label: "PicoRuby", level: 3 },
-		{ label: "Ruby", level: 5 }
-	]
+  name: "Bob",
+  skills: [
+    { label: "PicoRuby", level: 3 },
+    { label: "Ruby", level: 5 }
+  ]
 }
 
 case crew
 in { name: name, skills: [*, { label: "PicoRuby", level: level }, *] }
-	"#{name}さんは、PicoRuby レベル#{level}のスキルを持っています"
+  "#{name}さんは、PicoRuby レベル#{level}のスキルを持っています"
 else
-	"PicoRubyのスキルを持っていません"
+  "PicoRubyのスキルを持っていません"
 end
 
 # => "Bobさんは、PicoRuby レベル3のスキルを持っています"
@@ -62,7 +62,7 @@ end
 
 
 === Valueパターン
-Valueパターンは値を(@<code>{#===})で比較したときに@<code>{true}になるオブジェクトにマッチします。
+Valueパターンはパターンと対象を@<code>{#===}で比較した結果が@<code>{true}になる場合にマッチします。
 @<code>{#===}はRubyの「ケース等値演算子」で、クラスに対して使うとそのインスタンスかどうかを、RangeやRegexpに対して使うと包含・マッチするかどうかを判定します。
 @<list>{code3.2}のサンプルコードは、@<code>{Integer === 168 # => true}になるためマッチとなります。
 
@@ -80,7 +80,7 @@ end
 === Variableパターン
 Variableパターンは、対象の値がなんであってもマッチし、その値を新しい変数に束縛します。
 先頭が小文字かアンダースコア(_)で始まる名前を書くと新しい変数として束縛されます。
-単体で使うことは少なく、HashパターンやArrayパターンと組み合わせてネストした構造から値を取り出す際に力を発揮します。値が不要な場合は@<code>{_}を使うと「何でもマッチするが束縛しない」という意味になります。
+単体で使うことは少なく、HashパターンやArrayパターンと組み合わせてネストした構造から値を取り出す際に力を発揮します。値が不要な場合は@<code>{_}を使う慣習があります。@<code>{_}も通常の変数として束縛されますが、「この値は使わない」という意図を示す慣習的な書き方です。
 //listnum[code3.3][Variableパターンのサンプルコード][ruby]{
 value = "Alice"
 case value
@@ -123,11 +123,11 @@ end
 
 === Findパターン
 FindパターンはArrayオブジェクトか後述の@<code>{#deconstruct}メソッド(@<hd>{クラスオブジェクトのパターンマッチ|#deconstruct})を持つオブジェクトにマッチします。
-Arrayパターン(@<hd>{パターン図鑑|Arrayパターン})との違いは、Arrayパターンが先頭か末尾が固定なのに対し、Findパターンは配列のどこかにあればマッチします。配列の順序を問わず特定の要素を探したい場合に適しています。
+Findパターンは配列のどの位置にあってもマッチします。配列の中から特定の要素を位置を問わず探したい場合に適しています。
 //listnum[code3.6][Findパターンのサンプルコード][ruby]{
 crews = ["Alice", "Bob", "Charlie", "Dave"]
 case crews
-in [*, "Charlie" ,*]
+in [*, "Charlie", *]
   "Charlieさんがいました！"
 else
   "マッチしなかったよ..."
@@ -210,12 +210,12 @@ end
 
 == パターンマッチによるリファクタリング
 
-@<list>{code3.10}は、Octokit@<fn>{octokit}を使ってGitHubのAPIでアサインされていない かつ 'good first issue'@<fn>{good-first-issue}ラベルが割り当てられているissueを取得するコードです。
+@<list>{code3.10}は、Octokit@<fn>{octokit}を使ってGitHubのAPIでアサインされておらず、かつ'good first issue'@<fn>{good-first-issue}ラベルが割り当てられているissueを取得するコードです。
 やりたいことに対して複雑すぎると思いませんか？これをパターンマッチでリファクタリングしてみましょう。
-//listnum[code3.10][初心者向けのIssuesを取得するメソッド][ruby]{
+//listnum[code3.10][初心者向けのissueを取得するメソッド][ruby]{
 def fetch_unassigned_beginner_issues(repo)
   client = Octokit::Client.new(
-    :access_token => ENV['GITHUB_TOKEN'],
+    access_token: ENV['GITHUB_TOKEN'],
     auto_paginate: true
   )
   issues = client.search_issues("repo:#{repo} is:open is:issue")
@@ -253,7 +253,7 @@ end
 //listnum[code3.11][パターンマッチをしてリファクタリングしたコード][ruby]{
 def fetch_unassigned_beginner_issues(repo)
   client = Octokit::Client.new(
-    :access_token => ENV['GITHUB_TOKEN'],
+    access_token: ENV['GITHUB_TOKEN'],
     auto_paginate: true
   )
   issues = client.search_issues("repo:#{repo} is:open is:issue")
