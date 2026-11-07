@@ -7,12 +7,9 @@
 # 継承元設定
 inherit: ["config.yml"]
 
-# 電子版は印刷版と別のファイル名で出力する
 bookname: New-Contributors-ebook
 
 # B5の設定(10pt 40文字×35行) - 電子版
-# media=ebook では表紙が自動で入る。cover_fit_page=true で表紙・裏表紙画像を仕上がりサイズに合わせる
-# (表紙は images/cover.*、裏表紙は images/backcover.* を自動検出。layouts/config-local.tex.erb 参照)
 texdocumentclass: ["review-jsbook", "media=ebook,paper=b5,cover_fit_page=true,serial_pagination=true,openany,fontsize=10pt,baselineskip=15.4pt,line_length=40zw,number_of_lines=35,head_space=30mm,headsep=10mm,headheight=5mm,footskip=10mm"]
 # A5の設定(9pt 38文字×37行) - 電子版
 # texdocumentclass: ["review-jsbook", "media=ebook,paper=a5,serial_pagination=true,openany,fontsize=9pt,baselineskip=13pt,line_length=38zw,number_of_lines=37,head_space=15mm,headsep=3mm,headheight=5mm,footskip=10mm"]

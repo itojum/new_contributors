@@ -5,8 +5,6 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    # 印刷版と電子版は別ジョブでビルドする
-    # (npm run pdf は実行前に articles/*.pdf を削除するため、同じジョブでは両方を残せない)
     strategy:
       fail-fast: false
       matrix:
@@ -20,7 +18,6 @@ jobs:
     - name: checkout source
       uses: actions/checkout@v4.2.2
     # Build Artifacts
-    # アクションの config_file 入力は現状使われないため、Gruntfile.js が読む REVIEW_CONFIG_FILE で設定ファイルを切り替える
     - name: Build distribution file
       uses: TechBooster/ReVIEW-build-artifact-action@master
       env:
