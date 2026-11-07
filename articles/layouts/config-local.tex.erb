@@ -2,7 +2,21 @@
 <%- if @config['techbooster'] && @config['techbooster']['cover_fit_page'] -%>
 \recls@coverfitpagetrue
 <%- end -%>
-<%- if @config['techbooster'] && @config['techbooster']['backcoverimage'] -%>
-\def\techbooster@coverimage{images/<%= @config['techbooster']['backcoverimage'] %>}
+<%-
+  # images/ に置かれた表紙・裏表紙画像を自動検出する。
+  # 同名で複数の拡張子がある場合は png → jpg → jpeg → pdf の順で優先する。
+  find_page_image = lambda do |stem|
+    %w[png jpg jpeg pdf].map { |ext| "#{stem}.#{ext}" }.find { |f| File.exist?(File.join(@basedir, @config['imagedir'], f)) }
+  end
+  tb = @config['techbooster'] || {}
+  front_image = @config['coverimage'] ? nil : find_page_image.call(tb['coverimage_stem'] || 'cover')
+  back_image = tb['backcoverimage'] || find_page_image.call(tb['backcoverimage_stem'] || 'backcover')
+-%>
+<%- if front_image -%>
+\def\review@coverimage{./<%= @config['imagedir'] %>/<%= front_image %>}
+\def\review@coverimageoption{<%= @coverimageoption %>}
+<%- end -%>
+<%- if back_image -%>
+\def\techbooster@coverimage{<%= @config['imagedir'] %>/<%= back_image %>}
 <%- end -%>
 \makeatother
