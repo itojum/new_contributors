@@ -5,17 +5,27 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - config: config.yml
+            artifact: Output documents
+          - config: config-ebook.yml
+            artifact: Output documents (ebook)
     steps:
-    # uses v3 Stable version
     # https://github.com/actions/checkout
     - name: checkout source
       uses: actions/checkout@v4.2.2
     # Build Artifacts
     - name: Build distribution file
       uses: TechBooster/ReVIEW-build-artifact-action@master
+      env:
+        REVIEW_CONFIG_FILE: ${{ matrix.config }}
     # Upload Distribution file
     - name: Upload distribution file to github artifacts
       uses: actions/upload-artifact@v4.6.1
       with:
-        name: Output documents
+        name: ${{ matrix.artifact }}
         path: ./articles/*.pdf
+        if-no-files-found: error
