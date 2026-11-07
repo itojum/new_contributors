@@ -5,17 +5,30 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    # 印刷版と電子版は別ジョブでビルドする
+    # (npm run pdf は実行前に articles/*.pdf を削除するため、同じジョブでは両方を残せない)
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - config: config.yml
+            artifact: Output documents
+          - config: config-ebook.yml
+            artifact: Output documents (ebook)
     steps:
-    # uses v3 Stable version
     # https://github.com/actions/checkout
     - name: checkout source
       uses: actions/checkout@v4.2.2
     # Build Artifacts
+    # アクションの config_file 入力は現状使われないため、Gruntfile.js が読む REVIEW_CONFIG_FILE で設定ファイルを切り替える
     - name: Build distribution file
       uses: TechBooster/ReVIEW-build-artifact-action@master
+      env:
+        REVIEW_CONFIG_FILE: ${{ matrix.config }}
     # Upload Distribution file
     - name: Upload distribution file to github artifacts
       uses: actions/upload-artifact@v4.6.1
       with:
-        name: Output documents
+        name: ${{ matrix.artifact }}
         path: ./articles/*.pdf
+        if-no-files-found: error
